@@ -146,13 +146,14 @@ class ResumeAnalyzer:
         """Extract technical skills from text."""
         # Common technical skills patterns
         skill_patterns = [
-            r'python|java|javascript|c\+\+|ruby|php|swift|kotlin|rust|golang',
-            r'react|angular|vue|node\.js|express|django|flask|spring|laravel',
+            r'python|java|javascript|c|c\+\+|ruby|php|swift|kotlin|rust|golang|sdlc|oop|dynamic programming|dp|matlab',
+            r'react|frontend|backend|angular|vue|node\.js|express|django|flask|spring|laravel|asp.net|graphql',
             r'aws|azure|gcp|docker|kubernetes|jenkins|git|ci/cd',
-            r'sql|mysql|postgresql|mongodb|redis|elasticsearch',
-            r'machine learning|deep learning|nlp|computer vision|excel|hadoop|spark|data science',
+            r'sql|mysql|postgresql|mongodb|cassandra|firebase|dynamodb|redis|elasticsearch|dsa',
+            r'machine learning|deep learning|nlp|computer vision|excel|hadoop|spark|data science|data mining',
             r'html|css|sass|bootstrap|tailwind|tableau|powerbi',
-            r'agile|scrum|kanban|jira|confluence'
+            r'agile|scrum|kanban|jira|confluence|cloud|azure|google cloud|aws|cyber security|ethical hacking',
+            r'Android Development|iOS Development|flutter|dart'
         ]
         
         skills = set()
