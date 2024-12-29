@@ -1,7 +1,6 @@
 """Main Streamlit application."""
 import streamlit as st
 import os
-
 import sys
 
 project_root = os.path.dirname(os.path.abspath(__file__))
@@ -30,15 +29,27 @@ def display_education(education):
     st.subheader("🎓 Education")
     for edu in education:
         with st.expander(f"{edu['degree']} ({edu['year']})"):
-            st.write(edu['details'])
+            st.write(f"Degree: {edu['degree']}")
+            st.write(f"Year: {edu['year']}")
+
+
+
+
 
 def display_work_experience(experience):
     """Display work experience in a formatted way."""
     st.subheader("💼 Work Experience")
     for exp in experience:
-        with st.expander(f"{exp['company']}"):
-            st.write(f"📅 {' - '.join(exp['dates'])}")
-            st.write(exp['context'])
+        with st.expander(f"{exp['company']} ({' - '.join(exp['dates'])})"):
+            st.write(f"Company: {exp['company']}")
+            st.write(f"Dates: {' - '.join(exp['dates'])}")
+
+            
+            
+            
+
+
+
 
 def display_skills_comparison(resume_skills, job_skills):
     """Display skills comparison in a formatted way."""
@@ -78,7 +89,7 @@ def display_field_recommendations(skills):
         st.write("Not enough skills detected to make field recommendations.")
 
 def main():
-    st.title("Resume Analysis & Job Matching System")
+    st.title("ResumeInsight - A Resume-Analyzer")
     
     # Initialize ResumeAnalyzer
     analyzer = ResumeAnalyzer()

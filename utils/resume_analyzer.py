@@ -31,7 +31,7 @@ class ResumeAnalyzer:
     def extract_education(self, text: str) -> List[Dict[str, str]]:
         """Extract education information."""
         education = []
-        doc = self.nlp(text)
+        """doc = self.nlp(text)"""
         
         # Common education keywords
         edu_keywords = r'(bachelor|master|phd|b\.?s\.?|m\.?s\.?|b\.?a\.?|m\.?a\.?|doctorate|degree)'
@@ -76,19 +76,60 @@ class ResumeAnalyzer:
                     })
         
         return experience
+    
+    def extract_sections(self, text: str) -> Dict[str, str]:
+        """Split text into sections based on common resume headings."""
+        sections = {
+            "contact_info": "",
+            "education": "",
+            "work_experience": "",
+            "skills": "",
+            "other": ""
+        }
+        
+        # Use a list of common resume section headers to split the resume
+        section_keywords = {
+            "education": r'(education|degree|university|school|qualification)',
+            "work_experience": r'(work experience|experience|professional experience|employment)',
+            
+        }
+        
+        # Split the resume into sections based on keywords
+        for section, keyword in section_keywords.items():
+            match = re.search(keyword, text, re.IGNORECASE)
+            if match:
+                start = match.start()
+                end = match.end()
+                # Extract section text from the match to the next section or end of text
+                next_section_start = len(text)
+                for next_section, next_keyword in section_keywords.items():
+                    if next_section != section:
+                        next_match = re.search(next_keyword, text[end:], re.IGNORECASE)
+                        if next_match:
+                            next_section_start = min(next_section_start, next_match.start())
+                section_text = text[end:end + next_section_start].strip()
+                sections[section] = section_text
+        
+        # Capture the remaining text as 'other' (e.g., summary, references)
+        remaining_text = text.strip()
+        for section in sections:
+            remaining_text = remaining_text.replace(sections[section], "")
+        sections["other"] = remaining_text.strip()
+
+        return sections
 
     def extract_information(self, text: str) -> Dict[str, Any]:
         """Extract key information from resume text."""
-        doc = self.nlp(text)
+        sections = self.extract_sections(text)
         
         # Extract contact information
         contact_info = self.extract_contact_info(text)
         
         # Extract education
-        education = self.extract_education(text)
+        education = self.extract_education(sections.get("education", ""))
         
         # Extract work experience
-        work_experience = self.extract_work_experience(text)
+        work_experience = self.extract_work_experience(sections.get("work_experience", ""))
         
         # Extract skills (using custom patterns)
         skills = self.extract_skills(text)
@@ -109,8 +150,8 @@ class ResumeAnalyzer:
             r'react|angular|vue|node\.js|express|django|flask|spring|laravel',
             r'aws|azure|gcp|docker|kubernetes|jenkins|git|ci/cd',
             r'sql|mysql|postgresql|mongodb|redis|elasticsearch',
-            r'machine learning|deep learning|nlp|computer vision|data science',
-            r'html|css|sass|less|bootstrap|tailwind',
+            r'machine learning|deep learning|nlp|computer vision|excel|hadoop|spark|data science',
+            r'html|css|sass|bootstrap|tailwind|tableau|powerbi',
             r'agile|scrum|kanban|jira|confluence'
         ]
         
