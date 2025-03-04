@@ -20,6 +20,7 @@ def get_common_skills_db() -> List[str]:
         "Machine Learning", "Data Analysis", "AWS",
         "Docker", "Kubernetes", "React", "Node.js",
         "Git", "REST API", "MongoDB", "PostgreSQL","Excel","R","Tableau","PowerBi",
+        
     }
     
     

@@ -31,12 +31,11 @@ class ResumeAnalyzer:
     def extract_education(self, text: str) -> List[Dict[str, str]]:
         """Extract education information."""
         education = []
-        """doc = self.nlp(text)"""
         
         # Common education keywords
-        edu_keywords = r'(bachelor|master|phd|b\.?s\.?|m\.?s\.?|b\.?a\.?|m\.?a\.?|doctorate|degree)'
+        edu_keywords = r'(bachelor|master|phd|b\.?s\.?|m\.?s\.?|b\.?a\.?|m\.?a\.?|btech|mtech|doctorate|degree)'
         edu_sections = re.split(r'\n{2,}', text)
-        
+        print(edu_sections)
         for section in edu_sections:
             if re.search(edu_keywords, section.lower()):
                 # Extract degree
@@ -91,7 +90,6 @@ class ResumeAnalyzer:
         section_keywords = {
             "education": r'(education|degree|university|school|qualification)',
             "work_experience": r'(work experience|experience|professional experience|employment)',
-            
         }
         
         # Split the resume into sections based on keywords

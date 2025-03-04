@@ -1,1 +1,10 @@
 venv/ 
+
+
+# Ignore database file
+job_portal.db
+
+# Ignore Python cache files
+__pycache__/
+
+resume_analyzer.egg-info/

@@ -1,7 +1,12 @@
-streamlit==1.32.0
+streamlit==1.41.1
 PyPDF2==3.0.1
 spacy==3.7.4
 pandas==2.2.1
 scikit-learn==1.4.1.post1
 python-dotenv==1.0.1
 google-generativeai==0.8.3
+email-validator
+db-sqlite3
+secure-smtplib
+plotly
+bcrypt
