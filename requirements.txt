@@ -10,3 +10,6 @@ db-sqlite3
 secure-smtplib
 plotly
 bcrypt
+joblib==1.4.2
+numpy==1.26.4
+tensorflow==2.18.0
