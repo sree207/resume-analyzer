@@ -35,6 +35,20 @@ def apply_job_page(job):
     
     if uploaded_file and email:  # Ensure email is provided
         try:
+            # Check if the applicant has already applied for this job
+            conn = sqlite3.connect(DB_NAME)
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT id FROM applications
+                WHERE job_id = ? AND applicant_name = ?
+            """, (job[0], name))
+            existing_application = cursor.fetchone()
+
+            if existing_application:
+                st.error("You have already applied for this job.")
+                conn.close()
+                return
+
             # Extract text from PDF
             resume_text = extract_text_from_pdf(uploaded_file)
             
@@ -88,12 +102,8 @@ def apply_job_page(job):
             # Course recommendation
             display_course_recommendation()  # Pass the job role for course recommendations
 
-            
             # Submit application button
             if st.button("Submit Application"):
-                conn = sqlite3.connect(DB_NAME)
-                cursor = conn.cursor()
-                
                 # Insert the application
                 cursor.execute("""
                     INSERT INTO applications (job_id, applicant_name, applicant_email, score, status)

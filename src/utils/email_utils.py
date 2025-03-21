@@ -14,8 +14,8 @@ def send_emails(job, applicants, email_type):
         email_type (str): "acceptance" or "rejection".
     """
     # Email credentials 
-    sender_email = "Your_Email"  
-    sender_password = "Your_App_Password"  
+    sender_email = "bekaahben@gmail.com"  
+    sender_password = "jyhb wcfl rcoh qjcz"  
     smtp_server = "smtp.gmail.com"
     smtp_port = 587  
 

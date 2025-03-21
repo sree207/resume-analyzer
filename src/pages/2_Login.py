@@ -47,6 +47,10 @@ def login_page():
     if st.button("Sign Up", key="signup_button"):
         st.switch_page("pages/3_Sign_Up.py")
 
+    # Forgot Password button
+    if st.button("Forgot Password", key="forgot_password_button"):
+        st.switch_page("pages/9_Reset_Password.py")
+
 def main():
     login_page()
 

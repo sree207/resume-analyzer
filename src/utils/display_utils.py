@@ -6,13 +6,13 @@ from tensorflow.keras.models import load_model
 from utils.field_analyzer import FieldAnalyzer
 
 # Load trained model and encoders
-model = load_model(r'C:\resume-analyzer\models\course_recommendation_model.keras')
-job_role_encoder = joblib.load(r'C:\resume-analyzer\models\job_role_encoder.pkl')  # Load encoders
-course_name_encoder = joblib.load(r'C:\resume-analyzer\models\course_name_encoder.pkl')
-category_encoder = joblib.load(r'C:\resume-analyzer\models\category_encoder.pkl')
+model = load_model(r'E:\resume-analyzer\models\course_recommendation_model.keras')
+job_role_encoder = joblib.load(r'E:\resume-analyzer\models\job_role_encoder.pkl')  # Load encoders
+course_name_encoder = joblib.load(r'E:\resume-analyzer\models\course_name_encoder.pkl')
+category_encoder = joblib.load(r'E:\resume-analyzer\models\category_encoder.pkl')
 
 # Load processed dataset
-df_final = pd.read_csv(r'C:\resume-analyzer\models\df_final.csv')
+df_final = pd.read_csv(r'E:\resume-analyzer\models\df_final.csv')
 
 # 📞 Display Contact Information
 def display_contact_info(contact_info):

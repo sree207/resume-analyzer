@@ -19,22 +19,31 @@ def add_job_page():
         if submit:
             if role and location and salary and description:
                 try:
-                    conn = sqlite3.connect(DB_NAME)
-                    cursor = conn.cursor()
-
                     # Fetch the company name from session state
                     company_name = st.session_state.get("auth_user")
 
-                    # Insert the job with the company name
+                    # Check if the job already exists
+                    conn = sqlite3.connect(DB_NAME)
+                    cursor = conn.cursor()
                     cursor.execute("""
-                        INSERT INTO jobs (company_name, role, openings, location, salary, description)
-                        VALUES (?, ?, ?, ?, ?, ?)
-                    """, (company_name, role, openings, location, salary, description))
-                    conn.commit()
+                        SELECT id FROM jobs
+                        WHERE company_name = ? AND role = ? AND description = ?
+                    """, (company_name, role, description))
+                    existing_job = cursor.fetchone()
+
+                    if existing_job:
+                        st.error("Job description already exists.")
+                    else:
+                        # Insert into the main jobs table in job_portal.db
+                        cursor.execute("""
+                            INSERT INTO jobs (company_name, role, openings, location, salary, description)
+                            VALUES (?, ?, ?, ?, ?, ?)
+                        """, (company_name, role, openings, location, salary, description))
+                        conn.commit()
+                        st.success("Job added successfully!")
+                        time.sleep(3)
+                        st.switch_page("pages/1_Home.py")
                     conn.close()
-                    st.success("Job added successfully!")
-                    time.sleep(3)
-                    st.switch_page("pages/1_Home.py")
                 except sqlite3.Error as e:
                     st.error(f"Database error: {e}")
                 except Exception as e:

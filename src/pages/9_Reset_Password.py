@@ -24,19 +24,16 @@ def is_password_valid(password):
         return False, "Password must contain at least one special symbol."
     return True, "Password is valid."
 
-def signup_page():
-    st.header("Sign Up")
+def reset_password_page():
+    st.header("Reset Password")
 
     # Choose user type
-    user_type = st.radio("Sign Up as:", ("Company", "Applicant"))
+    user_type = st.radio("Reset Password for:", ("Company", "Applicant"))
 
-    # Sign Up form
-    if user_type == "Company":
-        company_name = st.text_input("Company Name")
-    else:
-        username = st.text_input("Username")
-    password = st.text_input("Password", type="password")
-    confirm_password = st.text_input("Re-enter Password", type="password")
+    # Reset Password form
+    username = st.text_input("Enter your username")
+    new_password = st.text_input("Enter new password", type="password")
+    confirm_new_password = st.text_input("Re-enter new password", type="password")
 
     # Display password creation criteria
     st.info("""
@@ -47,40 +44,43 @@ def signup_page():
         - At least one special symbol (e.g., !@#$%^&*(),.?":{}|<>).
     """)
 
-    if st.button("Sign Up", key="signup_button"):
+    if st.button("Reset Password", key="reset_password_button"):
         # Check if passwords match
-        if password != confirm_password:
+        if new_password != confirm_new_password:
             st.error("Passwords do not match.")
             return
 
         # Validate password
-        is_valid, message = is_password_valid(password)
+        is_valid, message = is_password_valid(new_password)
         if not is_valid:
             st.error(f"Password does not meet the requirements: {message}")
             return
 
-        # Hash the password
+        # Hash the new password
         salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(password.encode(), salt).decode()
+        hashed_password = bcrypt.hashpw(new_password.encode(), salt).decode()
 
-        # Save to database
+        # Update the password in the database
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
         try:
             if user_type == "Company":
-                cursor.execute("INSERT INTO companies (company_name, password) VALUES (?, ?)", (company_name, hashed_password))
+                cursor.execute("UPDATE companies SET password = ? WHERE company_name = ?", (hashed_password, username))
             else:
-                cursor.execute("INSERT INTO applicants (username, password) VALUES (?, ?)", (username, hashed_password))
+                cursor.execute("UPDATE applicants SET password = ? WHERE username = ?", (hashed_password, username))
             conn.commit()
-            st.success("Account created successfully!")
-            time.sleep(3)
-            st.switch_page("pages/1_Home.py")
-        except sqlite3.IntegrityError:
-            st.error("Username or Company Name already exists.")
+            if cursor.rowcount > 0:
+                st.success("Password reset successfully!")
+                time.sleep(3)
+                st.switch_page("pages/2_Login.py")
+            else:
+                st.error("Username not found.")
+        except sqlite3.Error as e:
+            st.error(f"Database error: {e}")
         conn.close()
 
 def main():
-    signup_page()
+    reset_password_page()
 
 if __name__ == "__main__":
     main()
